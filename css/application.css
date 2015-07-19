@@ -1,0 +1,17 @@
+#navbar_name {
+  font-size: 19px;
+  color: #FFFFFF;
+}
+.navbar-default .navbar-text {
+  color: #FFFFFF;
+}
+.navbar-default {
+  background-color: #404A62;
+  border-color: #443E3E;
+}
+body {
+  background-color: #C1E0DC;
+}
+.jumbotron {
+  background-color: #FDFCFC;
+}

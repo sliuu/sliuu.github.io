@@ -1,0 +1,63 @@
+---
+title: struggling with fluentd
+date: 2015-07-18 6:00 PM
+category: coding
+from: stephanieliu.net
+tags:
+- fluentd
+- logging
+- rails
+- sinatra
+- rack
+- ruby
+---
+<div class="container">
+<div class="page-header"><h2> fluentd from scratch </h2></div>
+<div class="jumbotron">
+  <p>
+  My mentor this summer is a 6 foot buff Greek man who goes by soto. To put it bluntly, he both terrifies me and I worship him. <br/> <br/>He's really smart, and he's got this air about him that screams a mixture of "yolo" and "work is life". It's basically "work hard, play hard," but for a 31-year-old greek man. <br/> <br/>His teaching style is very hands-off, and I have to admit I kind of like it that way. He wants me to figure shit out for myself, and so do I. He told me from the start that he hates when people ask him questions twice, so I don't. <br/><br/> For a while I followed him around and did simple tasks for him, but recently he told me to try to figure out fluentd, a centralized app logging service hosted by treasure data. Apparantly Logstasher, the service we currently use, crashes a lot, and so he wanted the switch. <br/> <br/>So there I was, an 18-year-old helpless intern plunged into a task I knew nothing about. (I didn't even know how rails logging worked). I learned later that he told the development team that this was an "impossible task". Well, I showed him ;) <br/><br/> So now, two weeks (and some sweat and tears) later, I'd like to share everything I learned about logging in rails and sinatra applications, how to convert their default ruby loggers into fluentd loggers, and how to forward logs to a remote fluentd logserver. Hang on tight folks, cause it's gonna be a lot. And maybe if some other poor intern gets thrown into the same task I was, they'll find this helpful. :) <br/><br/>
+  </p>
+  <h3> Basic Rails Logging </h3>
+  <p> To start, let's go back to basics. How does rails logging work? By default, rails will log to log/{environent}.log. So when you're in the development environment, visiting localhost:3000, logs will all go to the file log/development.log. <br/><br/> To create custom logs in a rails app, you can easily tell Rails to use a different logger, like this:
+  {% highlight ruby %}
+  Rails.logger = Logger.new("#{Rails.root}/log/user_logins.log")
+  {% endhighlight %}
+  </p><p>
+  When you want to log something to that logger, you can then call it:
+  {% highlight ruby %}
+  Rails.logger.info "#{@user.id} logged in at #{Time.now}"
+  {% endhighlight %}
+  </p> <p>
+  If you want to use the default logger (like log/development.log) but you want to log something extra to it, you can just call the logger from anywhere in your application:
+  {% highlight ruby %}
+  logger.info "Cool log my friend"
+  {% endhighlight %}
+  </p>
+  <h3> <br/> Logging with Fluentd in Rails Apps </h3>
+  <p> To send your basic rails logs (log/development.log) to a fluentd server is actually pretty straight-forward, but we'll take this step-by-step. Using the gem <a href="https://github.com/actindi/act-fluent-logger-rails">act-fluent-logger-rails</a>, you'll send over your logs to a specified port and IP address. Configured on that server will be a running fluentd service, which will accept connections from that specified port. Fluentd calls these "inputs". Each log sent over to fluentd will be tagged with a string of your choosing, and the fluentd service will match "tags" and then "output" those logs to an output of your choosing. You can be fun and use ElasticSearch + Kibana to see a pretty visual representation of your logs, or you can be boring and output to file, which just means writing those logs to a specific file of your choosing. Since we wanted our logs to be hosted on a different server, we needed to encrypt those logs before they were forwarded over, which fluentd also does. Now let's start with basic logging. </p>
+  <p> If you just want to use the basic logs (i.e. log/development.log or log/production.log, etc.)  <a href="https://github.com/actindi/act-fluent-logger-rails">act-fluent-logger-rails</a> is actually a great gem that will get the job done easily. Fluentd has a great <a href="http://www.fluentd.org/datasources/rails">mini-tutorial</a> on using the gem, and I highly recommend you check it out (you'll only need the first four steps to get the gist of it). All you'll need to do is add a file to your config folder and tell Rails which logger you want to use in the separate config/environments/ files. But there is a big flaw in the act-fluent-logger-rails gem, which is that it doesn't let you customize your loggers in different files. You get one logger for everything.</p>
+  <h3> <br/> So you want to customize? </h3>
+  <p> The easiest way to customize your logging is to use <a href="https://github.com/fluent/fluent-logger-ruby">fluent-logger-ruby</a>, but the problem I found was that a lot of our code had already been written for the Ruby Logger, and it would often call "info", "debug", "error", etc., on the logger, and so replacing the logger variable with a fluentd logger wasn't enough. In addition, things in our code like Delayed Job expected to be able to call those kinds of methods ("info", "debug") on the logger it was provided, but all logging was done in the background. So, I created a gem! Check it out! (shameless plug). It's called <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra</a> just because I first made it for Sinatra apps, but the premise is the same. If you have a lot of pre-written code you don't want to change, or if perhaps other APIs are expecting a regular Ruby logger, this gem lets you just change one line and get all logs sent to fluentd. Speaking of Sinatra... </p>
+  <h3><br/> Logging with Sinatra </h3>
+  <p> Sinatra is the main reason I created the gem, and that's because Sinatra expects to be able to call "write" on the logger it is provided, and it does all it's logging in the background. Normally, you would provide Sinatra with a basic ruby logger, and add in the "write" method like this:
+  {% highlight ruby linenos%}
+  require 'logger'
+Logger.class_eval { alias :write :'<<' }
+logger = ::Logger.new(::File.new("log/app.log","a+")
+configure do
+  use Rack::CommonLogger, logger
+end
+  {% endhighlight %}
+  </p>
+  <p> With fluentd and the <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra gem</a>, you can just add this to your code:
+  {% highlight ruby linenos %}
+  require 'fluent-logger-sinatra'
+logger = FluentLoggerSinatra::Logger.new('MyApp', 'logs', '127.0.0.1', 24224)
+configure do
+  use Rack::CommonLogger, logger
+end
+  {% endhighlight %}
+  <p> All logs will be tagged with "MyApp.logs", and you can match them from there. As I mentioned before, FluentLoggerSinatra also works great with Rails apps :) </p>
+  <p></br> Now that we know how to send logs to a fluentd server, it's time to learn how to recieve them </p>
+</div>
+</div>

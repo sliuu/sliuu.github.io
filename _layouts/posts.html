@@ -1,8 +1,10 @@
+---
+---
 <!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/application.css">
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}css/application.css">
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   </head>
 
@@ -17,22 +19,6 @@
         </ul>
       </div>
     </nav>
-    <body>
-  <div class="container">
-    <div class="jumbotron">
-      <h2> Recent Posts: </h2>
-      <ul>
-        
-          <li>
-            <h4>
-            <a href="/coding/2015/07/18/struggling-with-fluentd.html">struggling with fluentd</a>
-            </h4>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</body>
-
+    {{ content }}
   </body>
 </html>

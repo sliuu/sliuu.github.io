@@ -2,26 +2,19 @@
 title: welcome
 ---
 
-<h1> hello! </h1>
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-      {{ post.excerpt }}
-    </li>
-  {% endfor %}
-</ul>
-
-<p>Some recent blog posts:</p>
-
-<div class="posts">
-  <ul>
-    {% for post in site.posts limit:10 %}
-      <li>
-        {{post.date | date_to_string}} &mdash; <a href="{{post.url}}">{{post.title}}</a>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <a href="/archive" class="archive-btn">archive</a>
-</div>
+<body>
+  <div class="container">
+    <div class="jumbotron">
+      <h2> Recent Posts: </h2>
+      <ul>
+        {% for post in site.posts %}
+          <li>
+            <h4>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            </h4>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</body>
