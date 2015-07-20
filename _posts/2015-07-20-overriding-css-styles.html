@@ -1,0 +1,39 @@
+---
+title: Overriding CSS Styles
+date: 2015-07-20 2:45 PM
+category: coding
+from: stephanieliu.net
+tags:
+- css
+- bootstrap
+- front-end
+---
+<div class="container">
+<div class="page-header"><h2> Overriding CSS Styles </h2> </div>
+<div class="jumbotron">
+  <blockquote> <h4> <em>tl;dr</em> the most specific styles will override everything else </h4> </blockquote>
+  <p> Despite how hard I've tried to not get involved in the world of front-end and styling,
+  I've found that I can't escape that world. The world likes pretty things (and so do I), so let's be real, CSS is important.  Recently I've had to try overriding bootstrap styles, and it turns out it's not as easy as I thought. <br/><br/> The easiest way to override other styling is to add an id, because ids > classes in the world of css. But if you want to modify everything about a bootstrap class, for example if you want to modify the text-color of elements in the navbar, you'll want to style those bootstrap classes.
+  The catch is that the styling needs to be exact. For example, if I use inspect element to look at the navbar, I can see that bootstrap is styling the text color of everything in the navbar like this:
+  {% highlight ruby %}
+.navbar-default .navbar-brand {
+  color: #777;
+}
+  {% endhighlight %}
+  </p> <p>To override that color, specifying css like this:
+  {% highlight ruby %}
+.navbar-brand {
+  color: #FFF;
+}
+  {% endhighlight %}
+  </p><p> actually won't work, because it's less specific than the css styling that bootstrap provides. You have to actually specify it like this for it to work:
+  {% highlight ruby %}
+.navbar-default .navbar-brand {
+  color: #FFF;
+}
+  {% endhighlight %}
+  </p><p> P.S. Inspect element on Google Chrome is the most amazing thing to happen to front-end. You can play around with styling without ever having to change your code, so you can just try out different things without constantly reloading the page. 
+  </p>
+</div>
+
+
