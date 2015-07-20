@@ -10,18 +10,21 @@
 
   <body>
     <nav class="navbar navbar-default">
-      <div class="container-fluid">
+      <div class="container container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="http://stephanieliu.net">stephanie liu</p>
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="http://stephanieliu.net/about">about</a></li>
         </ul>
-      </div>
     </nav>
+    </div>
     <div class="container">
 <div class="page-header"><h2> Struggling with Fleuntd (Part 1) </h2></div>
 <div class="jumbotron">
+  <blockquote>
+    <h4> <em>tl;dr</em>   thanks to a large Greek man, I know a surprising amount about a centralized
+    app logging service known as fluentd </h4> </blockquote>
   <p>
   My mentor this summer is a 6 foot buff Greek man who goes by soto. To put it bluntly, he both terrifies me and I worship him. <br/> <br/>He's really smart, and he's got this air about him that screams a mixture of "yolo" and "work is life". It's basically "work hard, play hard," but for a 31-year-old greek man. <br/> <br/>His teaching style is very hands-off, and I have to admit I kind of like it that way. He wants me to figure shit out for myself, and so do I. He told me from the start that he hates when people ask him questions twice, so I don't. <br/><br/> For a while I followed him around and did simple tasks for him, but recently he told me to try to figure out <a href="http://www.fluentd.org/">fluentd</a>, a centralized app logging service hosted by treasure data. Apparantly Logstasher, the service we currently use, crashes a lot, and so he wanted the switch. <br/> <br/>So there I was, an 18-year-old helpless intern plunged into a task I knew nothing about. (I didn't even know how rails logging worked). I learned later that he told the development team that this was an "impossible task". Well, I showed him ;) <br/><br/> So now, two weeks (and some sweat and tears) later, I'd like to share everything I learned about logging in rails and sinatra applications, how to convert their default ruby loggers into fluentd loggers, and how to forward logs to a remote fluentd logserver. Hang on tight folks, cause it's gonna be a lot. And maybe if some other poor intern gets thrown into the same task I was, they'll find this helpful. :) <br/><br/>
   </p>

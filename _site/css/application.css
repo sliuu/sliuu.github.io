@@ -1,3 +1,13 @@
+a:focus, a:hover {
+  color:#af044c;
+  text-decoration: none;
+}
+a:hover #connect {
+  color: #FFFFFF;
+}
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #448f38;
+}
 .navbar-default .navbar-brand {
   color: #FFFFFF;
 }
