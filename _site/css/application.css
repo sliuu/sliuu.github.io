@@ -15,3 +15,6 @@ body {
 .jumbotron {
   background-color: #FDFCFC;
 }
+.jumbotron p {
+  font-size: 17px;
+}
