@@ -1,8 +1,7 @@
-#navbar_name {
-  font-size: 19px;
+.navbar-default .navbar-brand {
   color: #FFFFFF;
 }
-.navbar-default .navbar-text {
+.navbar-default .navbar-nav>li>a {
   color: #FFFFFF;
 }
 .navbar-default {
@@ -17,4 +16,10 @@ body {
 }
 .jumbotron p {
   font-size: 17px;
+}
+#connect {
+  color: #af044c;
+}
+a {
+  color: #448f38;
 }
