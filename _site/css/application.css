@@ -1,3 +1,6 @@
+code {
+  word-wrap: break-word;
+}
 body {
   font-size: 1.1em;
 }
