@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/application.css">
+    <link rel="stylesheet" href="/css/octicons/octicons.css">
+    <link href="/css/syntax.css" rel="stylesheet">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Creating custom environment variables in rails + using ordered options </title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="navbar-header">
+        <div class="container container-fluid">
+          <ul class="nav navbar-nav">
+            <li><a class="navbar-brand navbar-left" href="http://stephanieliu.net">stephanie liu</a></li>
+            <li><a class="navbar-right" href="http://stephanieliu.net/about">about</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!DOCTYPE html>
+<div class="container">
+  <div class="page-header">
+    <h2> Creating custom environment variables in rails + using ordered options </h2>
+  </div>
+  <div class="jumbotron">
+    <blockquote>
+  <h4> <em>tl;dr</em> always stay up-to-date if you want life to be easy </h4>
+</blockquote>
+<p> I hear rails 5.0 is coming out soon. That's exciting. The news reminded me of a time recently when I wanted to use some environment variables to separate the environments I would log to fluentd and those I would log to a temporary log file. So I figured there was some kind of configuration I could put in each of the environment configuration files (i.e. in config/environments/), that was similar to defining environment variables in your bashrc. I wanted something easy like config.<code> fluent_logging = true </code> in the production environment and <code> config.fluent_logging = false </code> in the test environment. Then maybe I'd be able to call it with <code> if Rails.fluent_logging </code>... </br><br/></p>
+<h4> Rails 4.2 or higher </h4>
+<p> Turns out it is this easy... If you have rails 4.2 and up. But the project I was working on was clearly several decades behind, because we were at 4.1.2, and the function isn't included. For those of you who keep up with the cool kids, it's actually as easy as this: <br/>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">config</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">fluent_logging</span> <span class="o">=</span> <span class="kp">true</span> <span class="c1"># in your config/environments/ files</span>
+<span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">super_debugger</span><span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># in any file where you wanna check something based on environment</span></code></pre></div>
+</p>
+<p> <br/> Now of course you could also just do the whole <code> if Rails.env == 'test' || Rails.env == 'development'... </code> but what if you change your mind and have to go through every file where you log and change the if statement? With these kind of pseudo environment variables, life is easy! For the golden oldies, it requires a little more configuration. But, it's not impossible. <br/><br/></p>
+<h4> Rails 4.1 and older </h4>
+<p> The implementation for old rails versions is actually very similar, but I like that the new rails versions have this functionality built in.
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">config</span><span class="o">.</span><span class="n">fluent</span> <span class="o">=</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">OrderedOptions</span><span class="o">.</span><span class="n">new</span>
+<span class="n">config</span><span class="o">.</span><span class="n">fluent</span><span class="o">.</span><span class="n">logging</span> <span class="o">=</span> <span class="kp">false</span> <span class="c1"># in your config/environments/ files</span>
+<span class="k">if</span> <span class="no">Rails</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">fluent</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="c1"># in any file where you&#39;d like to check this variable</span></code></pre></div>
+</p><p> <a href="http://api.rubyonrails.org/classes/ActiveSupport/OrderedOptions.html">ActiveSupport::OrderedOptions </a>lets you basically define key value pairs without needing a hash. Any instance of ActiveSupport::OrderedOptions responds to any methods and lets you define what those methods should return. So I've created an instance of it that I call "config.fluent", so I can define config.fluent.logging to be false. You can also define <code> config.fluent.my_favorite_number = 56 </code> and when you call <code> Rails.configuration.fluent.my_favorite_number </code> it will return 56. Pretty cool, eh? <br/><br/></p>
+<p> Still, I like keeping up with new upgrades. The world of open source moves pretty fast. If you don't stop and look around once in a while, you just might miss it. :) </p>
+</div>
+</div>
+
+  </div>
+</div>
+
+  </body>
+  <hr>
+  <div class="container text-center">
+    <h4>Connect with me!</h4>
+    <a href="http://github.com/sliuu"><div id="connect"><span class="octicon octicon-mark-github"></span>  Github</div></a>
+    <a href="mailto:sliu14@outlook.com"><div id="connect"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Email</div></a>
+    <a href="https://www.linkedin.com/in/stephanieliu14"><div id="connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  LinkedIn </div></a>
+  </div>
+  <hr>
+</html>

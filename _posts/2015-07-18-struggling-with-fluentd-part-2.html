@@ -11,67 +11,68 @@ tags:
 - rack
 - ruby
 ---
-<div class="container">
-<div class="page-header"><h2> Struggling with Fleuntd (Part 2) </h2></div>
-<div class="jumbotron">
-  <blockquote>
-    <h4> <em>tl;dr</em> know inputs, outputs, and tags, and you're gucci </h4>
-  </blockquote>
-  <p> If you've already seen <a href="{{ site.baseurl }}/coding/2015/07/18/struggling-with-fluentd-part-1.html">Part 1</a>, then you already know how to send logs over from rails or sinatra applications, with custom tags. Now all we have to do is match incoming logs with tags, and output them, with the fluentd server. Simple, right? <br/><br/> </p>
-  <h3> Setting up the fluentd server </h3>
-  <p> You'll need to <a href="http://docs.fluentd.org/v0.12/categories/installation">install fluentd</a> through the ruby gem or
-  through a RPM/DEB/.dmg package. I've done both, and the package is probably the easiest way. But let's go through installing on
-  ubuntu first.<br/> <br/>
-  <h4> Ubuntu Installation </h4>
-  <p> If you're running Ubuntu, all you have to do is install the DEB package following <a href="http://docs.fluentd.org/articles/install-by-deb">these instructions</a>. You're config file will be located at /etc/td-agent/td-agent.conf, and you can run
-  the service like this: <code> $ sudo service td-agent start </code> or like this: <code> $ /etc/init.d/td-agent start </code><br/><br/>
-  </p>
-  <h4> Gem Installation </h4>
-  <p> Installing with the <a href="http://docs.fluentd.org/articles/install-by-gem">ruby gem</a> is trickier, but do-able (you'll
-  likely run into more random errors this way though, I've found). The instructions on the fluentd docs are a little vague, so I'd
-  like to elaborate on each of the steps. <br/><br/> After installing the gem, you'll run <code> $ fluentd --setup ./fluent </code> to
-  make the directory where your fluentd configuration will be. By default the config file will be at ./fluent/fluent.conf. Keep in
-  mind that wherever you run the setup command will be where the fluent directory is created. To start the fluentd service, run
-  <code> $ fluentd -c [config-file] </code> So, for example, if your config file is at ~/fluent/fluent.conf, you'll run <code>
-    $ fluentd -c ~/fluent/fluent.conf </code> You can add in options like "-vv" or "-v" to be more verbose. <br/><br/></p>
-  <h3> Configuration </h4>
-  <h4> <br/> Input </h3>
-  <p> **All configuration is done in your config file, which will be either fluent.conf or td-agent.conf depending on how you installed it. Make sure you're editing the right file! <br/> <br/>Now that you have a fluent server running, it's time to accept incoming logs. The first configuration will be the "input", which
-  is a source directive in fluentd. We have to tell the fluent server which port it should accept connections from, like this:
-  {% highlight ruby %}
+<blockquote>
+  <h4> <em>tl;dr</em> know inputs, outputs, and tags, and you're gucci </h4>
+</blockquote>
+
+<p> <br/>If you've already seen <a href="{{ site.baseurl }}/coding/2015/07/18/struggling-with-fluentd-part-1.html">Part 1</a>, then you already know how to send logs over from rails or sinatra applications, with custom tags. Now all we have to do is match incoming logs with tags, and output them, with the fluentd server. Simple, right? <br/><br/></p>
+<h3> Setting up the fluentd server </h3>
+<p> You'll need to <a href="http://docs.fluentd.org/v0.12/categories/installation">install fluentd</a> through the ruby gem or
+through a RPM/DEB/.dmg package. I've done both, and the package is probably the easiest way. But let's go through installing on
+ubuntu first.<br/> <br/>
+
+<h4> Ubuntu Installation </h4>
+<p> If you're running Ubuntu, all you have to do is install the DEB package following <a href="http://docs.fluentd.org/articles/install-by-deb">these instructions</a>. You're config file will be located at /etc/td-agent/td-agent.conf, and you can run
+the service like this: <code> $ sudo service td-agent start </code> or like this: <code> $ /etc/init.d/td-agent start </code><br/><br/></p>
+
+<h4> Gem Installation </h4>
+<p> Installing with the <a href="http://docs.fluentd.org/articles/install-by-gem">ruby gem</a> is trickier, but do-able (you'll
+likely run into more random errors this way though, I've found). The instructions on the fluentd docs are a little vague, so I'd
+like to elaborate on each of the steps. <br/><br/> After installing the gem, you'll run <code> $ fluentd --setup ./fluent </code> to
+make the directory where your fluentd configuration will be. By default the config file will be at ./fluent/fluent.conf. Keep in
+mind that wherever you run the setup command will be where the fluent directory is created. To start the fluentd service, run
+<code> $ fluentd -c [config-file] </code> So, for example, if your config file is at ~/fluent/fluent.conf, you'll run <code>
+  $ fluentd -c ~/fluent/fluent.conf </code> You can add in options like "-vv" or "-v" to be more verbose. <br/><br/></p>
+
+<h3> Configuration </h4>
+
+<h4> <br/> Input </h3>
+<p> **All configuration is done in your config file, which will be either fluent.conf or td-agent.conf depending on how you installed it. Make sure you're editing the right file! <br/> <br/>Now that you have a fluent server running, it's time to accept incoming logs. The first configuration will be the "input", which
+is a source directive in fluentd. We have to tell the fluent server which port it should accept connections from, like this:
+{% highlight ruby %}
 <source>
-  type forward
-  port 24224
+type forward
+port 24224
 </source>
-  {% endhighlight %} </p> <p>
-  This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
-  choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you 
-  can tell fluent to tail a certain file and collect all those logs. <br/> <br/> </p>
-  <h4> Output </h4>
-  <p> Now that fluentd is accepting logs, we can use the tags we chose when we sent the logs to choose where each of the logs will go.
-  For example, if you used the <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra gem</a>, and you defined your logger like this: <code> logger = FluentLoggerSinatra::Logger.new('myapp', 'default_log', '127.0.0.1', 24224) </code> then all logs sent from that logger would be tagged with "myapp.default_log". In the fluentd configuration, we want to match those tags. So in your config file:
-  {% highlight ruby %}
+{% endhighlight %} </p>
+<p>This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
+choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you 
+can tell fluent to tail a certain file and collect all those logs. <br/> <br/> </p>
+
+<h4> Output </h4>
+<p> Now that fluentd is accepting logs, we can use the tags we chose when we sent the logs to choose where each of the logs will go.
+For example, if you used the <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra gem</a>, and you defined your logger like this: <code> logger = FluentLoggerSinatra::Logger.new('myapp', 'default_log', '127.0.0.1', 24224) </code> then all logs sent from that logger would be tagged with "myapp.default_log". In the fluentd configuration, we want to match those tags. So in your config file:
+{% highlight ruby %}
 <source>
-  type forward
-  port 24224
+type forward
+port 24224
 </source>
 <match myapp.default_log>
-  type file
-  format out_file
-  output_tag false
-  path /Users/sliu/log/myapp/default_logs/default_log
-  time_slice_format %Y%m%d%H%M
-  time_format %Y-%m-%d %H:%M:%S
-  utc
+type file
+format out_file
+output_tag false
+path /Users/sliu/log/myapp/default_logs/default_log
+time_slice_format %Y%m%d%H%M
+time_format %Y-%m-%d %H:%M:%S
+utc
 </match>
-  {% endhighlight %}
-  </p>
-  <p> This tells the fluent server that any logs with the tag "myapp.default_log" should be written to the file at the specified path
-  (the last part of the path - default_log - will be the first part of the name of the file, with the rest being the time stamp).
-  I chose to not include the tags in the logs (output_tag false) but including them is helpful for debugging (and you can match ** to
-  catch all unmatched tags). I also specified a time_format to make the time look better. <br/><br/> Outputting to file is probably
-  the easiest way to sort logs, but there are <a href="http://docs.fluentd.org/articles/output-plugin-overview">other output plugins</a> like outputting to s3, a mongodb, or elasticsearch. <br/><br/> Those are the basic configurations for using fluentd. In another
-  post, I'll discuss how to send logs from one fluentd server to a remote fluentd server, and ssl encrypt those logs for security.
-  (There is no way yet of sending encrypted logs right from your app to a remote fluentd server). </p>
+{% endhighlight %}
+</p>
 
-</div>
+<p> This tells the fluent server that any logs with the tag "myapp.default_log" should be written to the file at the specified path
+(the last part of the path - default_log - will be the first part of the name of the file, with the rest being the time stamp).
+I chose to not include the tags in the logs (output_tag false) but including them is helpful for debugging (and you can match ** to
+catch all unmatched tags). I also specified a time_format to make the time look better. <br/><br/> Outputting to file is probably
+the easiest way to sort logs, but there are <a href="http://docs.fluentd.org/articles/output-plugin-overview">other output plugins</a> like outputting to s3, a mongodb, or elasticsearch. <br/><br/> Those are the basic configurations for using fluentd. In another
+post, I'll discuss how to send logs from one fluentd server to a remote fluentd server, and ssl encrypt those logs for security.
+(There is no way yet of sending encrypted logs right from your app to a remote fluentd server). </p>

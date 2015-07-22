@@ -6,28 +6,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/css/application.css">
     <link rel="stylesheet" href="{{ site.baseurl }}/css/octicons/octicons.css">
+    <link href="{{ site.baseurl }}/css/syntax.css" rel="stylesheet">
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> {{ page.title }} </title>
   </head>
 
   <body>
     <nav class="navbar navbar-default">
-      <div class="container container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="http://stephanieliu.net">stephanie liu</p>
+      <div class="navbar-header">
+        <div class="container container-fluid">
+          <ul class="nav navbar-nav">
+            <li><a class="navbar-brand navbar-left" href="http://stephanieliu.net">stephanie liu</a></li>
+            <li><a class="navbar-right" href="http://stephanieliu.net/about">about</a></li>
+          </ul>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="http://stephanieliu.net/about">about</a></li>
-        </ul>
+      </div>
     </nav>
-    </div>
     {{ content }}
   </body>
   <hr>
-    <div class="container text-center">
-      <h4>Connect with me!</h4>
-      <a href="http://github.com/sliuu"><div id="connect"><span class="octicon octicon-mark-github"></span>  Github</div></a>
-      <a href="mailto:sliu14@outlook.com"><div id="connect"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Email</div></a>
-      <a href="https://www.linkedin.com/in/stephanieliu14"><div id="connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  LinkedIn </div></a>
-    </div>
+  <div class="container text-center">
+    <h4>Connect with me!</h4>
+    <a href="http://github.com/sliuu"><div id="connect"><span class="octicon octicon-mark-github"></span>  Github</div></a>
+    <a href="mailto:sliu14@outlook.com"><div id="connect"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Email</div></a>
+    <a href="https://www.linkedin.com/in/stephanieliu14"><div id="connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  LinkedIn </div></a>
+  </div>
+  <hr>
 </html>

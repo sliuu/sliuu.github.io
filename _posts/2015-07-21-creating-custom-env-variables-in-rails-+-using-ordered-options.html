@@ -1,0 +1,32 @@
+---
+title: Creating custom environment variables in rails + using ordered options
+date: 2015-07-21 9:30 PM
+category: coding
+from: stephanieliu.net
+tags:
+- rails
+- ruby
+---
+<blockquote>
+  <h4> <em>tl;dr</em> always stay up-to-date if you want life to be easy </h4>
+</blockquote>
+<p> I hear rails 5.0 is coming out soon. That's exciting. The news reminded me of a time recently when I wanted to use some environment variables to separate the environments I would log to fluentd and those I would log to a temporary log file. So I figured there was some kind of configuration I could put in each of the environment configuration files (i.e. in config/environments/), that was similar to defining environment variables in your bashrc. I wanted something easy like config.<code> fluent_logging = true </code> in the production environment and <code> config.fluent_logging = false </code> in the test environment. Then maybe I'd be able to call it with <code> if Rails.fluent_logging </code>... </br><br/></p>
+<h4> Rails 4.2 or higher </h4>
+<p> Turns out it is this easy... If you have rails 4.2 and up. But the project I was working on was clearly several decades behind, because we were at 4.1.2, and the function isn't included. For those of you who keep up with the cool kids, it's actually as easy as this: <br/>
+{% highlight ruby %}
+config.x.fluent_logging = true # in your config/environments/ files
+if Rails.configuration.x.super_debugger... # in any file where you wanna check something based on environment
+{% endhighlight %}
+</p>
+<p> <br/> Now of course you could also just do the whole <code> if Rails.env == 'test' || Rails.env == 'development'... </code> but what if you change your mind and have to go through every file where you log and change the if statement? With these kind of pseudo environment variables, life is easy! For the golden oldies, it requires a little more configuration. But, it's not impossible. <br/><br/></p>
+<h4> Rails 4.1 and older </h4>
+<p> The implementation for old rails versions is actually very similar, but I like that the new rails versions have this functionality built in.
+{% highlight ruby %}
+config.fluent = ActiveSupport::OrderedOptions.new
+config.fluent.logging = false # in your config/environments/ files
+if Rails.configuration.fluent.logging... # in any file where you'd like to check this variable
+{% endhighlight %}
+</p><p> <a href="http://api.rubyonrails.org/classes/ActiveSupport/OrderedOptions.html">ActiveSupport::OrderedOptions </a>lets you basically define key value pairs without needing a hash. Any instance of ActiveSupport::OrderedOptions responds to any methods and lets you define what those methods should return. So I've created an instance of it that I call "config.fluent", so I can define config.fluent.logging to be false. You can also define <code> config.fluent.my_favorite_number = 56 </code> and when you call <code> Rails.configuration.fluent.my_favorite_number </code> it will return 56. Pretty cool, eh? <br/><br/></p>
+<p> Still, I like keeping up with new upgrades. The world of open source moves pretty fast. If you don't stop and look around once in a while, you just might miss it. :) </p>
+</div>
+</div>
