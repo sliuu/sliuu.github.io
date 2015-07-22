@@ -1,3 +1,6 @@
+body {
+  font-size: 1.1em;
+}
 h2 {
   font-size: 2em;
 }
@@ -14,7 +17,7 @@ a.navbar-right {
   float: right;
 }
 .jumbotron {
-  padding: 30px;
+  padding: 1.5em;
 }
 a:focus, a:hover {
   color:#af044c;
