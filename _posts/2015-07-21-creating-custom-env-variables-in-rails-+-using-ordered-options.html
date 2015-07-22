@@ -8,7 +8,7 @@ tags:
 - ruby
 ---
 <blockquote>
-  <h5> <em>tl;dr</em> always stay up-to-date if you want life to be easy </h5>
+  <h4> <em>tl;dr</em> always stay up-to-date if you want life to be easy </h4>
 </blockquote>
 <p> I hear rails 5.0 is coming out soon. That's exciting. The news reminded me of a time recently when I wanted to use some environment variables to separate the environments I would log to fluentd and those I would log to a temporary log file. So I figured there was some kind of configuration I could put in each of the environment configuration files (i.e. in config/environments/), that was similar to defining environment variables in your bashrc. I wanted something easy like config.<code> fluent_logging = true </code> in the production environment and <code> config.fluent_logging = false </code> in the test environment. Then maybe I'd be able to call it with <code> if Rails.fluent_logging </code>... </br><br/></p>
 <h4> Rails 4.2 or higher </h4>
