@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/application.css">
+    <link rel="stylesheet" href="/css/octicons/octicons.css">
+    <link href="/css/syntax.css" rel="stylesheet">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Sort by and group by ruby methods for arrays </title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="navbar-header">
+        <div class="container container-fluid">
+          <ul class="nav navbar-nav">
+            <li><a class="navbar-brand navbar-left" href="http://stephanieliu.net">stephanie liu</a></li>
+            <li><a class="navbar-right" href="http://stephanieliu.net/about">about</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!DOCTYPE html>
+<div class="container">
+  <div class="page-header">
+    <h2> Sort by and group by ruby methods for arrays <small> August 11, 2015 10:45 </small></h2>
+  </div>
+  <div class="jumbotron">
+    <p> <br/> I didn't know a lot about ruby and all the cool things it could do when I started my internship this summer, but I did know this--ruby could do a lot of cool shit. So anytime I came across a problem I knew a lot of other people probably had, I would go through the ruby docs and, sure enough, I'd find a cool built-in ruby method. Probably Java has some cool stuff too (I don't really know) but academia tends to encourage making those methods yourself, and the real world tends to encourage brevity. And as much as I do really love making these kinds of methods myself, I thought I'd share two of the coolest things I've found. </p>
+<p> <br/> Look through the ruby docs for arrays, and you'll find a lot of hidden gems (at least if you're at the level of noob that I am). For example, if you have an array of, say, objects that respond to the method 'valid?', you can group the objects in your array by whether they're valid or not.
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">to_a</span>
+<span class="n">users</span><span class="o">.</span><span class="n">group_by!</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:valid?</span><span class="p">)</span>
+<span class="n">users</span><span class="o">[</span><span class="kp">true</span><span class="o">]</span> <span class="o">=</span> <span class="c1"># [user1, user2, user3]</span>
+<span class="n">users</span><span class="o">[</span><span class="kp">false</span><span class="o">]</span> <span class="o">=</span> <span class="c1"># [user4, user5]</span></code></pre></div>
+</p>
+<p> <br/> In this example, user1, user2, and user3 happen to be valid, while user4 and user5 happen to not be. "users" is now a hash, with keys of all responses to valid? and values of arrays of user objects. Keep in mind though that the keys will not be every possible response to the method, but only every response to the method from the objects in the array (so if none of the users are valid, there won't be a "true" key). </p>
+<p> <br/> Of course, you can also give group_by a block if you need to group by something more than just the objects' response to a method.</p>
+<p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">to_a</span>
+<span class="n">users</span><span class="o">.</span><span class="n">group_by!</span> <span class="p">{</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span> <span class="n">user</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span>
+<span class="n">users</span><span class="o">[</span><span class="s1">&#39;Students&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="c1"># [John, Jane, Mary]</span>
+<span class="n">users</span><span class="o">[</span><span class="s1">&#39;Teachers&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="c1"># [Mr.Young, Ms.Doe]</span></code></pre></div>
+</p>
+<p> <br/> And then there's sort_by, which will sort your array based on a given block, which is also super cool. <a href="https://www.igvita.com/2009/03/26/ruby-algorithms-sorting-trie-heaps/">Apparently</a> ruby uses quicksort, which has nlogn time complexity on average, so you can use that piece of trivia to impress all your friends, right? Anyway, ruby's sort_by is super straightforward, and basically the same thing as group_by.
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">people</span><span class="o">.</span><span class="n">sort_by!</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:name</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">people</span><span class="o">.</span><span class="n">sort_by!</span> <span class="p">{</span> <span class="o">|</span><span class="n">person</span><span class="o">|</span> <span class="n">person</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">capitalize</span> <span class="p">}</span></code></pre></div>
+</p>
+<p> <br/>So there you go, two cool quick methods ruby has that I enjoy using, and a fun fact as a bonus. The best things in life are free, am I right? </p>
+
+  </div>
+</div>
+
+  </body>
+  <hr>
+  <div class="container text-center">
+    <h4>Connect with me!</h4>
+    <a href="http://github.com/sliuu"><div id="connect"><span class="octicon octicon-mark-github"></span>  Github</div></a>
+    <a href="mailto:sliu14@outlook.com"><div id="connect"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Email</div></a>
+    <a href="https://www.linkedin.com/in/stephanieliu14"><div id="connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  LinkedIn </div></a>
+  </div>
+  <hr>
+</html>

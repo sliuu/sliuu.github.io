@@ -1,0 +1,35 @@
+---
+title: Sort by and group by ruby methods for arrays
+date: 2015-08-11 10:45 AM
+category: coding
+from: stephanieliu.net
+tags:
+- ruby
+---
+<p> <br/> I didn't know a lot about ruby and all the cool things it could do when I started my internship this summer, but I did know this--ruby could do a lot of cool shit. So anytime I came across a problem I knew a lot of other people probably had, I would go through the ruby docs and, sure enough, I'd find a cool built-in ruby method. Probably Java has some cool stuff too (I don't really know) but academia tends to encourage making those methods yourself, and the real world tends to encourage brevity. And as much as I do really love making these kinds of methods myself, I thought I'd share two of the coolest things I've found. </p>
+<p> <br/> Look through the ruby docs for arrays, and you'll find a lot of hidden gems (at least if you're at the level of noob that I am). For example, if you have an array of, say, objects that respond to the method 'valid?', you can group the objects in your array by whether they're valid or not.
+{% highlight ruby %}
+users = User.all.to_a
+users.group_by!(&:valid?)
+users[true] = # [user1, user2, user3]
+users[false] = # [user4, user5]
+{% endhighlight %}
+</p>
+<p> <br/> In this example, user1, user2, and user3 happen to be valid, while user4 and user5 happen to not be. "users" is now a hash, with keys of all responses to valid? and values of arrays of user objects. Keep in mind though that the keys will not be every possible response to the method, but only every response to the method from the objects in the array (so if none of the users are valid, there won't be a "true" key). </p>
+<p> <br/> Of course, you can also give group_by a block if you need to group by something more than just the objects' response to a method.</p>
+<p>
+{% highlight ruby %}
+users = User.all.to_a
+users.group_by! { |user| user.group.name.capitalize }
+users['Students'] = # [John, Jane, Mary]
+users['Teachers'] = # [Mr.Young, Ms.Doe]
+{% endhighlight %}
+</p>
+<p> <br/> And then there's sort_by, which will sort your array based on a given block, which is also super cool. <a href="https://www.igvita.com/2009/03/26/ruby-algorithms-sorting-trie-heaps/">Apparently</a> ruby uses quicksort, which has nlogn time complexity on average, so you can use that piece of trivia to impress all your friends, right? Anyway, ruby's sort_by is super straightforward, and basically the same thing as group_by.
+{% highlight ruby %}
+people.sort_by!(&:name)
+# or
+people.sort_by! { |person| person.name.capitalize }
+{% endhighlight %}
+</p>
+<p> <br/>So there you go, two cool quick methods ruby has that I enjoy using, and a fun fact as a bonus. The best things in life are free, am I right? </p>
