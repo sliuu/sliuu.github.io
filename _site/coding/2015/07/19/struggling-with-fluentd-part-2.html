@@ -46,9 +46,9 @@ the service like this: <code> $ sudo service td-agent start </code> or like this
 likely run into more random errors this way though, I've found). The instructions on the fluentd docs are a little vague, so I'd
 like to elaborate on each of the steps. <br/><br/> After installing the gem, you'll run <code> $ fluentd --setup ./fluent </code> to
 make the directory where your fluentd configuration will be. By default the config file will be at ./fluent/fluent.conf. Keep in
-mind that wherever you run the setup command will be where the fluent directory is created. To start the fluentd service, run
+mind that wherever you run the setup command will be where the fluent directory is created (something that took me waaayy too long to figure out). To start the fluentd service, run
 <code> $ fluentd -c [config-file] </code> So, for example, if your config file is at ~/fluent/fluent.conf, you'll run <code>
-  $ fluentd -c ~/fluent/fluent.conf </code> You can add in options like "-vv" or "-v" to be more verbose. <br/><br/></p>
+  $ fluentd -c ~/fluent/fluent.conf </code> You can add in options like "-vv" or "-v" to be more verbose (with -vv being the most verbose, and very helpful for debugging) <br/><br/></p>
 
 <h3> Configuration </h4>
 
@@ -62,6 +62,9 @@ is a source directive in fluentd. We have to tell the fluent server which port i
 <p>This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
 choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you 
 can tell fluent to tail a certain file and collect all those logs. <br/> <br/> </p>
+
+<p> Keep in mind that if you choose to tail a file as one of your source directives, you'll need to give td-agent read access to those
+logs, since I've found that a lot of nginx and syslogs are set to 640, which td-agent will (rightfully, perhaps) complain about <br/> <br/></p>
 
 <h4> Output </h4>
 <p> Now that fluentd is accepting logs, we can use the tags we chose when we sent the logs to choose where each of the logs will go.
@@ -82,12 +85,16 @@ For example, if you used the <a href="https://github.com/sliuu/fluent-logger-sin
 </p>
 
 <p> This tells the fluent server that any logs with the tag "myapp.default_log" should be written to the file at the specified path
-(the last part of the path - default_log - will be the first part of the name of the file, with the rest being the time stamp).
+(the last part of the path - default_log - will be the first part of the name of the file, with the rest being the time stamp, so logs will ultimately look like "default_log.01022015.log").
 I chose to not include the tags in the logs (output_tag false) but including them is helpful for debugging (and you can match ** to
 catch all unmatched tags). I also specified a time_format to make the time look better. <br/><br/> Outputting to file is probably
 the easiest way to sort logs, but there are <a href="http://docs.fluentd.org/articles/output-plugin-overview">other output plugins</a> like outputting to s3, a mongodb, or elasticsearch. <br/><br/> Those are the basic configurations for using fluentd. In another
 post, I'll discuss how to send logs from one fluentd server to a remote fluentd server, and ssl encrypt those logs for security.
-(There is no way yet of sending encrypted logs right from your app to a remote fluentd server). </p>
+(There is no way yet of sending encrypted logs right from your app to a remote fluentd server). I'm feeling lazy right now, but hopefully I get to it soon. <br/> <br/> </p>
+
+<h4> Some Quick Tips </h4>
+
+<p> A few things when setting fluentd up - if you want to write to a file, like in the example above, you need to give td-agent write access to those folders. If you want td-agent to make parent directories to a file folder, you can also give it execute access to a parent directory, and it will do that. If you installed a td-agent package (rather than use gem installation), the logs won't be output in stdout like they will if you used the gem. To see the logs, go into /var/log/td-agent/td-agent.log (which you might need sudo access to see). If somethings still not right and you can't figure out why, catch all logs that come into your sources with <match **> or catch all fluent logs with <match fluent.**> and you can output them to special directories. This is especially helpful for catching typos :P. <br/> <br/>
 
   </div>
 </div>
