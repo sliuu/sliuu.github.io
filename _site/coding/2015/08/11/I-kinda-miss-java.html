@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/application.css">
+    <link rel="stylesheet" href="/css/octicons/octicons.css">
+    <link href="/css/syntax.css" rel="stylesheet">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> I kinda miss java </title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="navbar-header">
+        <div class="container container-fluid">
+          <ul class="nav navbar-nav">
+            <li><a class="navbar-brand navbar-left" href="http://stephanieliu.net">stephanie liu</a></li>
+            <li><a class="navbar-right" href="http://stephanieliu.net/about">about</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!DOCTYPE html>
+<div class="container">
+  <div class="page-header">
+    <h2> I kinda miss java <small> August 11, 2015 23:30 </small></h2>
+  </div>
+  <div class="jumbotron">
+    <p> <br/> When I started this summer's internship and dove head-first into the world of ruby on rails, my mind was pretty much blown. I could write methods without having to first decide if they would return a string, an array, an integer, or nothing? I didn't have to tell every method which kind of object(s) it should expect, and in what order?? </p>
+<img src="/assets/sorcery.png" alt="sorcery" style="width:30%;display:block;">
+<p> <br/> But... then the allure started to wear off. When I wrote errors in ruby, I didn't catch them during compilation (because there is no compilation), I caught them during run-time. When I passed a method an object it wasn't expecting, the error wasn't caught until the program complained (again, during run-time) when it expected to be able to call a specific method on the object. </p>
+<p> <br/> When you write a method in ruby, it looks like this:
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">smile</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+  <span class="n">num</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s1">&#39;smile!&#39;</span> <span class="p">}</span>
+<span class="k">end</span></code></pre></div>
+</p>
+<p> <br/> But there's a blatant problem with this method--what if I don't realize num needs to be an integer for this method to work? What if I pass it "5", as a string? The error won't be caught during compilation, it'll be caught when I try to run the program and ruby can't find a method "times" for class String.</p>
+<p> <br/> So now let's write this program in java.
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">count</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;smile!&quot;</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+</p>
+<p> <br/> It's pretty verbose, to say the least. It's also not really in english (what do you mean, 'void'?). But if I call count("5"), I know for sure java will scream at me way before I can even run the program. </p>
+<p> Yeah, ruby is pretty simple. But maybe simple isn't always better... </p>
+
+  </div>
+</div>
+
+  </body>
+  <hr>
+  <div class="container text-center">
+    <h4>Connect with me!</h4>
+    <a href="http://github.com/sliuu"><div id="connect"><span class="octicon octicon-mark-github"></span>  Github</div></a>
+    <a href="mailto:sliu14@outlook.com"><div id="connect"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Email</div></a>
+    <a href="https://www.linkedin.com/in/stephanieliu14"><div id="connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  LinkedIn </div></a>
+  </div>
+  <hr>
+</html>

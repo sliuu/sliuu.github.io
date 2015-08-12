@@ -1,0 +1,32 @@
+---
+title: I kinda miss java
+date: 2015-08-11 11:30 PM
+category: coding
+from: stephanieliu.net
+tags:
+- random
+- java
+- ruby
+---
+<p> <br/> When I started this summer's internship and dove head-first into the world of ruby on rails, my mind was pretty much blown. I could write methods without having to first decide if they would return a string, an array, an integer, or nothing? I didn't have to tell every method which kind of object(s) it should expect, and in what order?? </p>
+<img src="{{ site.baseurl }}/assets/sorcery.png" alt="sorcery" style="width:30%;display:block;">
+<p> <br/> But... then the allure started to wear off. When I wrote errors in ruby, I didn't catch them during compilation (because there is no compilation), I caught them during run-time. When I passed a method an object it wasn't expecting, the error wasn't caught until the program complained (again, during run-time) when it expected to be able to call a specific method on the object. </p>
+<p> <br/> When you write a method in ruby, it looks like this:
+{% highlight ruby %}
+def smile(num)
+  num.times { puts 'smile!' }
+end
+{% endhighlight %}
+</p>
+<p> <br/> But there's a blatant problem with this method--what if I don't realize num needs to be an integer for this method to work? What if I pass it "5", as a string? The error won't be caught during compilation, it'll be caught when I try to run the program and ruby can't find a method "times" for class String.</p>
+<p> <br/> So now let's write this program in java.
+{% highlight java %}
+public void count(int num) {
+  for(int i = 0; i < num; i++) {
+    System.out.println("smile!");
+  }
+}
+{% endhighlight %}
+</p>
+<p> <br/> It's pretty verbose, to say the least. It's also not really in english (what do you mean, 'void'?). But if I call count("5"), I know for sure java will scream at me way before I can even run the program. </p>
+<p> Yeah, ruby is pretty simple. But maybe simple isn't always better... </p>
