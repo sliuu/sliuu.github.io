@@ -39,10 +39,10 @@ mind that wherever you run the setup command will be where the fluent directory 
 <h4> <br/> Input </h3>
 <p> **All configuration is done in your config file, which will be either fluent.conf or td-agent.conf depending on how you installed it. Make sure you're editing the right file! <br/> <br/>Now that you have a fluent server running, it's time to accept incoming logs. The first configuration will be the "input", which
 is a source directive in fluentd. We have to tell the fluent server which port it should accept connections from, like this:
-{% highlight ruby %}
+{% highlight yaml%}
 <source>
-type forward
-port 24224
+  type forward
+  port 24224
 </source>
 {% endhighlight %} </p>
 <p>This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
@@ -55,19 +55,19 @@ logs, since I've found that a lot of nginx and syslogs are set to 640, which td-
 <h4> Output </h4>
 <p> Now that fluentd is accepting logs, we can use the tags we chose when we sent the logs to choose where each of the logs will go.
 For example, if you used the <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra gem</a>, and you defined your logger like this: <code> logger = FluentLoggerSinatra::Logger.new('myapp', 'default_log', '127.0.0.1', 24224) </code> then all logs sent from that logger would be tagged with "myapp.default_log". In the fluentd configuration, we want to match those tags. So in your config file:
-{% highlight ruby %}
+{% highlight yaml %}
 <source>
-type forward
-port 24224
+  type forward
+  port 24224
 </source>
 <match myapp.default_log>
-type file
-format out_file
-output_tag false
-path /Users/sliu/log/myapp/default_logs/default_log
-time_slice_format %Y%m%d%H%M
-time_format %Y-%m-%d %H:%M:%S
-utc
+  type file
+  format out_file
+  output_tag false
+  path /Users/sliu/log/myapp/default_logs/default_log
+  time_slice_format %Y%m%d%H%M
+  time_format %Y-%m-%d %H:%M:%S
+  utc
 </match>
 {% endhighlight %}
 </p>

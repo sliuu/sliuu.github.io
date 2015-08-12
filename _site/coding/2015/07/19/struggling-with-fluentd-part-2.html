@@ -55,10 +55,10 @@ mind that wherever you run the setup command will be where the fluent directory 
 <h4> <br/> Input </h3>
 <p> **All configuration is done in your config file, which will be either fluent.conf or td-agent.conf depending on how you installed it. Make sure you're editing the right file! <br/> <br/>Now that you have a fluent server running, it's time to accept incoming logs. The first configuration will be the "input", which
 is a source directive in fluentd. We have to tell the fluent server which port it should accept connections from, like this:
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">source</span><span class="o">&gt;</span>
-<span class="n">type</span> <span class="n">forward</span>
-<span class="n">port</span> <span class="mi">24224</span>
-<span class="o">&lt;</span><span class="sr">/source&gt;</span></code></pre></div> </p>
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">&lt;source&gt;</span>
+  <span class="l-Scalar-Plain">type forward</span>
+  <span class="l-Scalar-Plain">port 24224</span>
+<span class="l-Scalar-Plain">&lt;/source&gt;</span></code></pre></div> </p>
 <p>This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
 choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you 
 can tell fluent to tail a certain file and collect all those logs. <br/> <br/> </p>
@@ -69,19 +69,19 @@ logs, since I've found that a lot of nginx and syslogs are set to 640, which td-
 <h4> Output </h4>
 <p> Now that fluentd is accepting logs, we can use the tags we chose when we sent the logs to choose where each of the logs will go.
 For example, if you used the <a href="https://github.com/sliuu/fluent-logger-sinatra">fluent-logger-sinatra gem</a>, and you defined your logger like this: <code> logger = FluentLoggerSinatra::Logger.new('myapp', 'default_log', '127.0.0.1', 24224) </code> then all logs sent from that logger would be tagged with "myapp.default_log". In the fluentd configuration, we want to match those tags. So in your config file:
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&lt;</span><span class="n">source</span><span class="o">&gt;</span>
-<span class="n">type</span> <span class="n">forward</span>
-<span class="n">port</span> <span class="mi">24224</span>
-<span class="o">&lt;</span><span class="sr">/source&gt;</span>
-<span class="sr">&lt;match myapp.default_log&gt;</span>
-<span class="sr">type file</span>
-<span class="sr">format out_file</span>
-<span class="sr">output_tag false</span>
-<span class="sr">path /</span><span class="no">Users</span><span class="o">/</span><span class="n">sliu</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">myapp</span><span class="o">/</span><span class="n">default_logs</span><span class="o">/</span><span class="n">default_log</span>
-<span class="n">time_slice_format</span> <span class="o">%</span><span class="n">Y</span><span class="o">%</span><span class="n">m</span><span class="o">%</span><span class="n">d</span><span class="o">%</span><span class="n">H</span><span class="o">%</span><span class="n">M</span>
-<span class="n">time_format</span> <span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span> <span class="o">%</span><span class="ss">H</span><span class="p">:</span><span class="o">%</span><span class="ss">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span>
-<span class="n">utc</span>
-<span class="o">&lt;</span><span class="sr">/match&gt;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">&lt;source&gt;</span>
+  <span class="l-Scalar-Plain">type forward</span>
+  <span class="l-Scalar-Plain">port 24224</span>
+<span class="l-Scalar-Plain">&lt;/source&gt;</span>
+<span class="l-Scalar-Plain">&lt;match myapp.default_log&gt;</span>
+  <span class="l-Scalar-Plain">type file</span>
+  <span class="l-Scalar-Plain">format out_file</span>
+  <span class="l-Scalar-Plain">output_tag false</span>
+  <span class="l-Scalar-Plain">path /Users/sliu/log/myapp/default_logs/default_log</span>
+  <span class="l-Scalar-Plain">time_slice_format %Y%m%d%H%M</span>
+  <span class="l-Scalar-Plain">time_format %Y-%m-%d %H:%M:%S</span>
+  <span class="l-Scalar-Plain">utc</span>
+<span class="l-Scalar-Plain">&lt;/match&gt;</span></code></pre></div>
 </p>
 
 <p> This tells the fluent server that any logs with the tag "myapp.default_log" should be written to the file at the specified path
