@@ -1,0 +1,28 @@
+---
+title: Error expectations (or the lack thereof) in rspec
+date: 2015-08-18 12:00 PM
+category: coding
+from: stephanieliu.net
+tags:
+- rspec
+- ruby
+---
+<p> I came across something weird today, that I thought I'd write down before I came across it again later. I was writing a test to not expect an error like this: </p>
+{% highlight ruby %}
+it 'does not raise an error' do
+  expect(foo.bar).to_not raise_error
+end
+{% endhighlight %}
+<p> But that raises an error (wait, is this meta? probably not...) because rspec is expecting an argument after raise_error. So,  you'd have to write it like this: </p>
+{% highlight ruby %}
+it 'does not raise a NoMethodError' do
+  expect(foo.bar).to_not raise_error(NoMethodError)
+end
+{% endhighlight %}
+<p> But what if I don't want to specify the error I don't want to get? What if I just want to make sure no error is raised at all? Turns out, all you need to do is switch some words around and change the parentheses to curly braces, like so: </p>
+{% highlight ruby %}
+it 'does not raise an error' do
+  expect{ foo.bar }.not_to raise_error
+end
+{% endhighlight %}
+<p> And that works! Am I the only one who thinks that's super cool/weird? Anyway, go forth and not expect errors! </p>
