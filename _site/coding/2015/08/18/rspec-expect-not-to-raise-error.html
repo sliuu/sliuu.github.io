@@ -30,13 +30,13 @@
   <div class="jumbotron">
     <p> I came across something weird today, that I thought I'd write down before I came across it again later. I was writing a test to not expect an error like this: </p>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;does not raise an error&#39;</span> <span class="k">do</span>
-  <span class="n">expect</span><span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span><span class="o">.</span><span class="n">to_not</span> <span class="n">raise_error</span>
+  <span class="n">expect</span><span class="p">{</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="p">}</span><span class="o">.</span><span class="n">to_not</span> <span class="n">raise_error</span>
 <span class="k">end</span></code></pre></div>
 <p> But that raises an error (wait, is this meta? probably not...) because rspec is expecting an argument after raise_error. So,  you'd have to write it like this: </p>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;does not raise a NoMethodError&#39;</span> <span class="k">do</span>
-  <span class="n">expect</span><span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span><span class="o">.</span><span class="n">to_not</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">NoMethodError</span><span class="p">)</span>
+  <span class="n">expect</span><span class="p">{</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="p">}</span><span class="o">.</span><span class="n">to_not</span> <span class="n">raise_error</span><span class="p">(</span><span class="no">NoMethodError</span><span class="p">)</span>
 <span class="k">end</span></code></pre></div>
-<p> But what if I don't want to specify the error I don't want to get? What if I just want to make sure no error is raised at all? Turns out, all you need to do is switch some words around and change the parentheses to curly braces, like so: </p>
+<p> But what if I don't want to specify the error I don't want to get? What if I just want to make sure no error is raised at all? Turns out, all you need to do is switch some words around, like so: </p>
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;does not raise an error&#39;</span> <span class="k">do</span>
   <span class="n">expect</span><span class="p">{</span> <span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="p">}</span><span class="o">.</span><span class="n">not_to</span> <span class="n">raise_error</span>
 <span class="k">end</span></code></pre></div>
