@@ -12,3 +12,4 @@ defaults:
       layout: "default"
 gems:
   - jekyll-feed
+  - kramdown
