@@ -1,6 +1,6 @@
 ---
 title: Git - Moving changes to different branches
-date: 2015-08-19 12:45 PM
+date: 2015-09-05 5:45 PM
 category: coding
 from: stephanieliu.net
 tags:
