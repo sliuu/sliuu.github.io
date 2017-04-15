@@ -11,7 +11,7 @@ I recently created a pull request with 92 changed files... 92!? Who wants to rev
 
 Which brought me to my Git journey of resetting, stashing, tracking, and committing. And here's what I learned.
 
-My problem was that I wasn't just changing files. I was removing files and adding files. So my first thought was to check out a branch from my changed branch, reset the head to point to the commit before all the changes, and then selectively add and commit specific changes... which, actually, would've worked just fine--what tripped me up, was the language `git add`. 
+My problem was that I wasn't just changing files. I was removing files and adding files. So my first thought was to check out a branch from my changed branch, reset the head to point to the commit before all the changes, and then selectively add and commit specific changes... which, actually, would've worked just fine--what tripped me up, was the language `git add`.
 
 So after checking out a branch from my modified branch and resetting the head to the previous commit, running `git status` informed me that all the files I had deleted were now not staged for commit, and all the files I had created were untracked. What's the difference? Honestly, I can't say that I know exactly--but I do know this: untracked files are files git is kind of ignoring for now. So, for example, if you ran `git stash` in this kind of state, all untracked changes would remain unchanged in your directory, but all "unstaged" changes would be stashed. And then of course, you could run `git stash pop` to bring those changes back.
 
@@ -22,3 +22,5 @@ Anyway, what I actually ended up doing was resetting my head to one commit prior
 If I had made modifications to files, this wouldn't have worked, since `git stash` would've reverted all my changes! What I should've done was just checked out a new branch, reset the head to the previous commit, and then ran `git add` on each file I wanted to add as well as each file I wanted to remove. (That's the weird part--running `git add the-file-to-remove` when that file doesn't even exist in your directory as is).
 
 Oh well, lesson learned. I'd love to understand git front to back... such a mysterious beast, git.
+
+$$ \sum_{i=1}^n 1 = \infty $$
