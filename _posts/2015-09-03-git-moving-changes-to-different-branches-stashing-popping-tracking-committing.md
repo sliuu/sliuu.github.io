@@ -22,5 +22,3 @@ Anyway, what I actually ended up doing was resetting my head to one commit prior
 If I had made modifications to files, this wouldn't have worked, since `git stash` would've reverted all my changes! What I should've done was just checked out a new branch, reset the head to the previous commit, and then ran `git add` on each file I wanted to add as well as each file I wanted to remove. (That's the weird part--running `git add the-file-to-remove` when that file doesn't even exist in your directory as is).
 
 Oh well, lesson learned. I'd love to understand git front to back... such a mysterious beast, git.
-
-$$ \sum_{i=1}^n 1 = \infty $$
