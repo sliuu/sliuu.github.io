@@ -2,7 +2,7 @@
 title: Git - Moving changes to different branches
 date: 2015-09-05 5:45 PM
 category: coding
-from: stephanieliu.net
+from: stephanieliu.me
 tags:
 - git
 - coding

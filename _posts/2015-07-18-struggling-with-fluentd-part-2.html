@@ -2,7 +2,7 @@
 title: Struggling with fluentd (pt. 2)
 date: 2015-07-19 11:30 PM
 category: coding
-from: stephanieliu.net
+from: stephanieliu.me
 tags:
 - fluentd
 - logging
@@ -46,7 +46,7 @@ is a source directive in fluentd. We have to tell the fluent server which port i
 </source>
 {% endhighlight %} </p>
 <p>This tells the fluent server to accept TCP port connections from port 24224. You can have as many "inputs", or source directives, as you'd like. There are a variety of <a href="http://docs.fluentd.org/articles/input-plugin-overview">input plugins</a> that you can
-choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you 
+choose from, although some may require some extra installation. For example, you can have one of your inputs be a file, and you
 can tell fluent to tail a certain file and collect all those logs. <br/> <br/> </p>
 
 <p> Keep in mind that if you choose to tail a file as one of your source directives, you'll need to give td-agent read access to those

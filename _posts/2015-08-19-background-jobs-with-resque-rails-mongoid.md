@@ -2,7 +2,7 @@
 title: Background jobs with resque, rails, and mongoid
 date: 2015-08-19 12:45 PM
 category: coding
-from: stephanieliu.net
+from: stephanieliu.me
 tags:
 - rails
 - resque
